@@ -38,5 +38,6 @@ SRCPREFIX=signed-
 BOOTLOADERFILE=bootloader.bin
 BOOTLOADER=3.41
 SLEEPDURATION=10
+UNLOCKBOOTLOADER=true
 ERASEALL=true
 source ../../../common/generate-factory-images-common.sh
