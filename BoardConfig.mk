@@ -48,7 +48,6 @@ BOARD_SEPOLICY_UNION := \
         genfs_contexts \
         app.te \
         btmacreader.te \
-        compatibility.te \
         device.te \
         drmserver.te \
         init_shell.te \
