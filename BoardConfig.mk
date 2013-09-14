@@ -56,5 +56,6 @@ BOARD_SEPOLICY_UNION := \
         sensors_config.te \
         shell.te \
         surfaceflinger.te \
-        system.te \
+        system_app.te \
+        system_server.te \
         zygote.te
