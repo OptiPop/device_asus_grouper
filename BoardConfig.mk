@@ -31,7 +31,7 @@
 USE_CAMERA_STUB := true
 USE_PROPRIETARY_AUDIO_EXTENSIONS := false
 
-BOARD_HAL_STATIC_LIBRARIES := libdumpstate.grouper
+BOARD_LIB_DUMPSTATE := libdumpstate.grouper
 
 TARGET_RECOVERY_UI_LIB := librecovery_ui_grouper
 
@@ -40,22 +40,5 @@ TARGET_RELEASETOOLS_EXTENSIONS := device/asus/grouper
 -include vendor/asus/grouper/BoardConfigVendor.mk
 include device/asus/grouper/BoardConfigCommon.mk
 
-BOARD_SEPOLICY_DIRS := \
-        device/asus/grouper/sepolicy
+TARGET_RECOVERY_FSTAB = device/asus/grouper/fstab.grouper
 
-BOARD_SEPOLICY_UNION := \
-        file_contexts \
-        genfs_contexts \
-        app.te \
-        btmacreader.te \
-        device.te \
-        drmserver.te \
-        init_shell.te \
-        file.te \
-        rild.te \
-        sensors_config.te \
-        shell.te \
-        surfaceflinger.te \
-        system_app.te \
-        system_server.te \
-        zygote.te
