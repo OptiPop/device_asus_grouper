@@ -98,5 +98,10 @@ BOARD_SEPOLICY_UNION += \
         shell.te \
         surfaceflinger.te \
         system_app.te \
+<<<<<<< HEAD
         system_server.te
 >>>>>>> f47cda3... Move sysfs_devices_system_cpu to the central policy.
+=======
+        system_server.te \
+        ueventd.te
+>>>>>>> edc8b9d... Fix ueventd denial.
