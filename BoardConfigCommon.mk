@@ -106,5 +106,10 @@ BOARD_SEPOLICY_UNION += \
 >>>>>>> f47cda3... Move sysfs_devices_system_cpu to the central policy.
 =======
         system_server.te \
+<<<<<<< HEAD
         ueventd.te
 >>>>>>> edc8b9d... Fix ueventd denial.
+=======
+        ueventd.te \
+        vold.te
+>>>>>>> bd0dbaa... Fix encryption on Nexus 7 v1
