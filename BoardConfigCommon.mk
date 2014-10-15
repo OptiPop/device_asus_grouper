@@ -78,9 +78,8 @@ NEED_WORKAROUND_CORTEX_A9_745320 := true
 
 BOARD_USES_GROUPER_MODULES := true
 
-<<<<<<< HEAD
 TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := true
-=======
+
 BOARD_SEPOLICY_DIRS += \
         device/asus/grouper/sepolicy
 
@@ -101,15 +100,7 @@ BOARD_SEPOLICY_UNION += \
         sensors_config.te \
         surfaceflinger.te \
         system_app.te \
-<<<<<<< HEAD
-        system_server.te
->>>>>>> f47cda3... Move sysfs_devices_system_cpu to the central policy.
-=======
         system_server.te \
-<<<<<<< HEAD
-        ueventd.te
->>>>>>> edc8b9d... Fix ueventd denial.
-=======
         ueventd.te \
-        vold.te
->>>>>>> bd0dbaa... Fix encryption on Nexus 7 v1
+        vold.te \
+        radio.te
