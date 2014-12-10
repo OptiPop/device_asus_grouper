@@ -250,6 +250,10 @@ on boot
 # Interactive governor settings
     chown system system /sys/devices/system/cpu/cpufreq/interactive/boost_factor
     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boost_factor
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/core_lock_count
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/core_lock_count
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/core_lock_period
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/core_lock_period
     chown system system /sys/devices/system/cpu/cpufreq/interactive/go_maxspeed_load
     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/go_maxspeed_load
     chown system system /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
@@ -305,7 +309,6 @@ on boot
 service wpa_supplicant /system/bin/wpa_supplicant \
     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
     -I/system/etc/wifi/wpa_supplicant_overlay.conf \
-    -O/data/misc/wifi/sockets \
     -e/data/misc/wifi/entropy.bin -g@android:wpa_wlan0
     #   we will start as root and wpa_supplicant will switch to user wifi
     #   after setting up the capabilities required for WEXT
@@ -318,8 +321,7 @@ service wpa_supplicant /system/bin/wpa_supplicant \
 
 service p2p_supplicant /system/bin/wpa_supplicant \
     -iwlan0 -Dnl80211 -iwlan0 -c/data/misc/wifi/wpa_supplicant.conf \
-    -I/system/etc/wifi/wpa_supplicant_overlay.conf \
-    -O/data/misc/wifi/sockets -N \
+    -I/system/etc/wifi/wpa_supplicant_overlay.conf -N \
     -ip2p0 -Dnl80211 -c /data/misc/wifi/p2p_supplicant.conf \
     -I/system/etc/wifi/p2p_supplicant_overlay.conf \
     -puse_p2p_group_interface=1 -e/data/misc/wifi/entropy.bin \
