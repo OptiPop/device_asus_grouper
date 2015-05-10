@@ -37,7 +37,7 @@ PRODUCT_PROPERTY_OVERRIDES := \
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 	persist.sys.usb.config=mtp
 
-include frameworks/native/build/tablet-dalvik-heap.mk
+include frameworks/native/build/tablet-7in-hdpi-1024-dalvik-heap.mk
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_KERNEL):kernel \
@@ -45,6 +45,7 @@ PRODUCT_COPY_FILES += \
     device/asus/grouper/fstab.grouper:root/fstab.grouper \
     device/asus/grouper/ueventd.grouper.rc:root/ueventd.grouper.rc \
     device/asus/grouper/init.grouper.usb.rc:root/init.grouper.usb.rc \
+    device/asus/grouper/gps.conf:system/etc/gps.conf
 
 ifneq ($(TARGET_PREBUILT_WIFI_MODULE),)
 PRODUCT_COPY_FILES += \
@@ -95,7 +96,8 @@ PRODUCT_PACKAGES := \
     hcitool \
     bttest \
     com.android.future.usb.accessory \
-    whisperd
+    whisperd \
+    keystore.grouper
 
 # for bugmailer
 PRODUCT_PACKAGES += send_bug
