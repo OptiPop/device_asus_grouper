@@ -22,9 +22,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <sys/time.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 
 #include <cutils/log.h>
 #include <cutils/properties.h>
@@ -62,7 +59,6 @@
 #define MIN_WRITE_SLEEP_US 2000
 #define MAX_WRITE_SLEEP_US ((OUT_PERIOD_SIZE * OUT_SHORT_PERIOD_COUNT * 1000000) \
                                 / OUT_SAMPLING_RATE)
-#define DOCK_IN_STATUS_PATH "/sys/bus/i2c/devices/4-001c/dock_status"
 
 enum {
     OUT_BUFFER_TYPE_UNKNOWN,
@@ -168,7 +164,6 @@ static int get_next_buffer(struct resampler_buffer_provider *buffer_provider,
                                    struct resampler_buffer* buffer);
 static void release_buffer(struct resampler_buffer_provider *buffer_provider,
                                   struct resampler_buffer* buffer);
-static bool is_dock_in(void);
 
 /*
  * NOTE: when multiple mutexes have to be acquired, always take the
@@ -182,23 +177,23 @@ static void select_devices(struct audio_device *adev)
 {
     int headphone_on;
     int speaker_on;
+    int docked;
     int main_mic_on;
 
     headphone_on = adev->out_device & (AUDIO_DEVICE_OUT_WIRED_HEADSET |
                                     AUDIO_DEVICE_OUT_WIRED_HEADPHONE);
     speaker_on = adev->out_device & AUDIO_DEVICE_OUT_SPEAKER;
+    docked = adev->out_device & AUDIO_DEVICE_OUT_ANLG_DOCK_HEADSET;
     main_mic_on = adev->in_device & AUDIO_DEVICE_IN_BUILTIN_MIC;
 
     reset_mixer_state(adev->ar);
 
-    if (speaker_on) {
-      if(is_dock_in())
-        audio_route_apply_path(adev->ar, "dock");
-    else
+    if (speaker_on)
         audio_route_apply_path(adev->ar, "speaker");
-    }
     if (headphone_on)
         audio_route_apply_path(adev->ar, "headphone");
+    if (docked)
+        audio_route_apply_path(adev->ar, "dock");
     if (main_mic_on) {
         if (adev->orientation == ORIENTATION_LANDSCAPE)
             audio_route_apply_path(adev->ar, "main-mic-left");
@@ -208,8 +203,8 @@ static void select_devices(struct audio_device *adev)
 
     update_mixer_state(adev->ar);
 
-    ALOGV("hp=%c speaker=%c main-mic=%c", headphone_on ? 'y' : 'n',
-          speaker_on ? 'y' : 'n', main_mic_on ? 'y' : 'n');
+    ALOGV("hp=%c speaker=%c dock=%c main-mic=%c", headphone_on ? 'y' : 'n',
+          speaker_on ? 'y' : 'n', docked ? 'y' : 'n', main_mic_on ? 'y' : 'n');
 }
 
 /* must be called with hw device and output stream mutexes locked */
@@ -453,42 +448,6 @@ static void release_buffer(struct resampler_buffer_provider *buffer_provider,
                                    offsetof(struct stream_in, buf_provider));
 
     in->frames_in -= buffer->frame_count;
-}
-
-static bool is_dock_in(void)
-{
-    int fd = -1;
-    int ret = 0;
-    static char buf[16];
-
-    memset(buf, 0, sizeof(buf));
-
-    fd = open(DOCK_IN_STATUS_PATH, O_RDONLY);
-
-    if(fd < 0){
-        ALOGE("open dock state file fail");
-        goto exit_file_fail;
-    }
-    else
-        ret = read(fd, buf, sizeof(buf));
-
-    if(ret < 0){
-        ALOGE("read dock state fail");
-    }
-    else
-        strcpy(strchr(buf,'\n'), "");
-
-    if(!strcmp(buf,"1")){
-        ALOGD("dock in");
-        return true;
-    }
-    else{
-        ALOGD("no dock");
-        return false;
-    }
-
-exit_file_fail:
-    return false;
 }
 
 /* read_frames() reads frames from kernel driver, down samples to capture rate
