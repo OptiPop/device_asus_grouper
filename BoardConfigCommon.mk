@@ -38,11 +38,9 @@ TARGET_CPU_VARIANT := cortex-a9
 
 # Compiler flags
 USE_O3_OPTIMIZATIONS=true
-FLOOP_NEST_OPTIMIZE=true
 ENABLE_GCCONLY=true
 USE_HOST_4_8=true
 STRICT_ALIASING=true
-FFAST_MATH := true
 
 TARGET_USERIMAGES_USE_EXT4 := true
 ifeq ($(HOST_OS),linux)
